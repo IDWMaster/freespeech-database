@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/IDWMaster/freespeech-database/issues"
   },
-  "homepage": "https://github.com/IDWMaster/freespeech-database#readme"
+  "homepage": "https://github.com/IDWMaster/freespeech-database#readme",
+  "dependencies": {
+    "freespeech-cryptography": "^1.0.0",
+    "freespeech-session": "^1.0.4"
+  }
 }
