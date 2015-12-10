@@ -1,6 +1,6 @@
 {
   "name": "freespeech-database",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A database backend for the FreeSpeech project",
   "main": "db.js",
   "scripts": {

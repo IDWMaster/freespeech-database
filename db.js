@@ -1,4 +1,4 @@
-var mongodb = require('mongodb');
+var mongo = require('mongodb');
 var net = require('net');
 var child_process = require('child_process');
 var fs = require('fs');
