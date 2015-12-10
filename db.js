@@ -151,7 +151,8 @@ fs.mkdir('db', function () {
             exitHandlers.push(function () {
                 proc.kill();
             });
-            mongo.MongoClient.connect('mongodb://127.0.0.1:' + portno + '/FreeSpeech', function (err, mdb) {
+            setTimeout(function(){
+                mongo.MongoClient.connect('mongodb://127.0.0.1:' + portno + '/FreeSpeech', function (err, mdb) {
                     if (err != null) {
                         console.log('Error establishing database connection.');
                         throw err;
@@ -159,6 +160,8 @@ fs.mkdir('db', function () {
                     db = mdb;
                     dbReadyCallback();
                 });
+            },8000);
+            
         });
     });
     });
