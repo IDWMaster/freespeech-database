@@ -4,7 +4,7 @@ var child_process = require('child_process');
 var fs = require('fs');
 var NodeRSA = require('node-rsa');
 var db;
-
+var dbReadyCallback;
 
 var DistDocument = function() {
     var pubkey; //The public key for the document
@@ -157,11 +157,19 @@ fs.mkdir('db', function () {
                         throw err;
                     }
                     db = mdb;
+                    dbReadyCallback();
                 });
         });
     });
     });
     module.exports = {
         EncryptionKeys:EncryptionKeys,
-        FirstHopServers:FirstHopServers
+        FirstHopServers:FirstHopServers,
+        onDbReady:function(callback){
+            if(db) {
+                callback();
+            }else {
+                dbReadyCallback = callback;
+            }
+        }
     };
