@@ -74,6 +74,7 @@ var EncryptionKeys = {
     },
     getDefaultKey: function (callback) {
         db.collection('keys').find({hasPrivate: true, isDefault: true}).each(function (err, doc) {
+            
             if (!doc) {
                 callback(null);
                 return false;
@@ -172,7 +173,15 @@ fs.mkdir('db', function () {
             if(db) {
                 callback();
             }else {
-                dbReadyCallback = callback;
+                if(dbReadyCallback) {
+                    var oldcb = dbReadyCallback;
+                    dbReadyCallback = function(){
+                        oldcb();
+                        callback();
+                    };
+                }else {
+                    dbReadyCallback = callback;
+                }
             }
         }
     };
