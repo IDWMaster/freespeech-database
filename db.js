@@ -99,9 +99,9 @@ var EncryptionKeys = {
     add: function (key, callback, isDefault) {
         var binkey;
         if(!key.isPublic(true)) {
-            key.exportKey('pkcs1-der');
+            binkey = key.exportKey('pkcs1-der');
         }else {
-            key.exportKey('pkcs8-public-der');
+            binkey = key.exportKey('pkcs8-public-der');
         }
         var doc = {
             hasPrivate: !key.isPublic(true),
