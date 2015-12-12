@@ -2,7 +2,8 @@ var mongo = require('mongodb');
 var net = require('net');
 var child_process = require('child_process');
 var fs = require('fs');
-var NodeRSA = require('node-rsa');
+var crypt = require('freespeech-cryptography');
+var NodeRSA = crypt.NodeRSA;
 var db;
 var dbReadyCallback;
 
@@ -188,5 +189,6 @@ fs.mkdir('db', function () {
                     dbReadyCallback = callback;
                 }
             }
-        }
+        },
+        NodeRSA:NodeRSA
     };
