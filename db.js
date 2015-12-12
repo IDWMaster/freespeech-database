@@ -64,7 +64,7 @@ var EncryptionKeys = {
             }
             if (doc) {
                 var key = new NodeRSA();
-                ;
+                
                 key.importKey(doc.key.buffer, 'pkcs1-der');
                 return callback(key);
             } else {
@@ -97,7 +97,12 @@ var EncryptionKeys = {
         });
     },
     add: function (key, callback, isDefault) {
-        var binkey = key.exportKey('pkcs1-der');
+        var binkey;
+        if(!key.isPublic(true)) {
+            key.exportKey('pkcs1-der');
+        }else {
+            key.exportKey('pkcs8-public-der');
+        }
         var doc = {
             hasPrivate: !key.isPublic(true),
             key: binkey,
