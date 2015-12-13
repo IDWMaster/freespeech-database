@@ -126,26 +126,22 @@ var EncryptionKeys = {
 
 
 var exitHandlers = new Array();
-function exitHandler(options, err) {
-
-    for (var i = 0; i < exitHandlers.length; i++) {
-        try {
-            exitHandlers[i]();
-        } catch (er) {
-
-        }
+process.on('exit',function(){
+    for(var i = 0;i<exitHandlers.length;i++) {
+        exitHandlers[i]();
     }
-
-
-    if (options.exit) {
-        process.exit();
-    }
-
-};
+});
+process.on('SIGINT',function(){
+    process.exit();
+});
+process.on('SIGTERM',function(){
+    process.exit();
+});
 
 
 var server = net.createServer(function (client) {});
 fs.mkdir('db', function () {
+    
     server.listen(0, '::');
     server.on('listening', function () {
         var portno = server.address().port;
@@ -158,16 +154,16 @@ fs.mkdir('db', function () {
             exitHandlers.push(function () {
                 proc.kill();
             });
-            setTimeout(function(){
+            var retryTimeout = setInterval(function(){
                 mongo.MongoClient.connect('mongodb://127.0.0.1:' + portno + '/FreeSpeech', function (err, mdb) {
                     if (err != null) {
-                        console.log('Error establishing database connection.');
-                        throw err;
+                        return;
                     }
+                    clearInterval(retryTimeout);
                     db = mdb;
                     dbReadyCallback();
                 });
-            },8000);
+            },200);
             
         });
     });
