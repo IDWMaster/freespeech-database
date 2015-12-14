@@ -90,7 +90,11 @@ var EncryptionKeys = {
         db.collection('keys').find({thumbprint: thumbprint}).each(function (err, doc) {
             if (doc) {
                 var key = new NodeRSA();
+                if(doc.hasPrivate) {
                 key.importKey(doc.key.buffer, 'pkcs1-der');
+            }else {
+                key.importKey(doc.key.buffer,'pkcs8-public-der');
+            }
                 return callback(key);
             }
             callback(null);
