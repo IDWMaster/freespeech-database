@@ -75,14 +75,14 @@ var EncryptionKeys = {
     },
     getDefaultKey: function (callback) {
         db.collection('keys').find({hasPrivate: true, isDefault: true}).each(function (err, doc) {
-            
-            if (!doc) {
+            if (doc == null) {
                 callback(null);
                 return false;
             } else {
                 var key = new NodeRSA();
                 key.importKey(doc.key.buffer, 'pkcs1-der');
-                return callback(key);
+                callback(key);
+                return false; //NOTE: FIXED!
             }
         });
     },
