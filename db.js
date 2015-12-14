@@ -95,7 +95,8 @@ var EncryptionKeys = {
             }else {
                 key.importKey(doc.key.buffer,'pkcs8-public-der');
             }
-                return callback(key);
+                callback(key);
+                return false;
             }
             callback(null);
             return false;
