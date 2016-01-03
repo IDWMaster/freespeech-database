@@ -64,9 +64,7 @@ var EncryptionKeys = {
                 return false;
             }
             if (doc) {
-                var key = new NodeRSA();
-                
-                key.importKey(doc.key.buffer, 'pkcs1-der');
+                var key = crypto.importKey(doc.key.buffer);
                 return callback(key);
             } else {
                 return callback(null);
@@ -79,8 +77,7 @@ var EncryptionKeys = {
                 callback(null);
                 return false;
             } else {
-                var key = new NodeRSA();
-                key.importKey(doc.key.buffer, 'pkcs1-der');
+                var key = crypto.importKey(doc.key.buffer);
                 callback(key);
                 return false; //NOTE: FIXED!
             }
@@ -89,12 +86,7 @@ var EncryptionKeys = {
     findKey: function (thumbprint, callback) {
         db.collection('keys').find({thumbprint: thumbprint}).each(function (err, doc) {
             if (doc) {
-                var key = new NodeRSA();
-                if(doc.hasPrivate) {
-                key.importKey(doc.key.buffer, 'pkcs1-der');
-            }else {
-                key.importKey(doc.key.buffer,'pkcs8-public-der');
-            }
+                var key = crypto.importKey(doc.key.buffer);
                 callback(key);
                 return false;
             }
@@ -104,13 +96,13 @@ var EncryptionKeys = {
     },
     add: function (key, callback, isDefault) {
         var binkey;
-        if(!key.isPublic(true)) {
-            binkey = key.exportKey('pkcs1-der');
+        if(key.isPrivate()) {
+            binkey = key.exportPrivate();
         }else {
-            binkey = key.exportKey('pkcs8-public-der');
+            binkey = key.exportPublic();
         }
         var doc = {
-            hasPrivate: !key.isPublic(true),
+            hasPrivate: key.isPrivate(),
             key: binkey,
             thumbprint: key.thumbprint(),
             isDefault: (isDefault == true)
