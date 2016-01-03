@@ -64,7 +64,7 @@ var EncryptionKeys = {
                 return false;
             }
             if (doc) {
-                var key = crypto.importKey(doc.key.buffer);
+                var key = crypt.importKey(doc.key.buffer);
                 return callback(key);
             } else {
                 return callback(null);
@@ -77,7 +77,7 @@ var EncryptionKeys = {
                 callback(null);
                 return false;
             } else {
-                var key = crypto.importKey(doc.key.buffer);
+                var key = crypt.importKey(doc.key.buffer);
                 callback(key);
                 return false; //NOTE: FIXED!
             }
@@ -86,7 +86,7 @@ var EncryptionKeys = {
     findKey: function (thumbprint, callback) {
         db.collection('keys').find({thumbprint: thumbprint}).each(function (err, doc) {
             if (doc) {
-                var key = crypto.importKey(doc.key.buffer);
+                var key = crypt.importKey(doc.key.buffer);
                 callback(key);
                 return false;
             }
